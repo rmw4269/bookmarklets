@@ -95,9 +95,13 @@ javascript: {
 			console.log(globalProps.sort(propSorter).map(name => String.fromCodePoint(0x2022, 0x20) + name).join("\n"));
 		}
 		console.groupEnd();
-		window.setTimeout(function() {
-			window.alert(globalProps.length > 0 ? `${globalProps.length} custom global propert${globalProps.length == 1 ? "y" : "ies"}:\n${globalProps.map(name => String.fromCodePoint(0x22EE, 0x20) + name).join("\n")}` : "no custom global properties")
-		}, 0);
+		{
+			let alertMessage = globalProps.length > 0 ? `${globalProps.length} custom global propert${globalProps.length == 1 ? "y" : "ies"}:\n${globalProps.slice(0, 16).map(name => String.fromCodePoint(0x2022, 0x20) + name).join("\n")}` : "no custom global properties";
+			if (globalProps.length > 16) { alertMessage += `\n${String.fromCodePoint(0x22EE)}`; }
+			window.setTimeout(function() {
+				window.alert(alertMessage);
+			}, 0);
+		}
 	};
 	let propWind, error;
 
