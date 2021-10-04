@@ -19,7 +19,7 @@ javascript: {
 		 * @param b second string to compare
 		 * @return negative number when <var>a</var> comes before <var>b</var>, positive number when <var>b</var> comes before <var>a</var>, and zero in all other cases
 		 */
-		let compare = Intl?.Collator ? new Intl.Collator('en', {
+		let compare = globalThis.Intl?.Collator ? new Intl.Collator('en', {
 			usage: "sort",
 			sensitivity: "base",
 			numeric: true,
