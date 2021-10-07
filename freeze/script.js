@@ -17,7 +17,7 @@ javascript: {
 				for (let attr of ["href", "src"]) {
 					for (let elm of replacement.querySelectorAll(`[${attr}]`)) {
 						/* expand relative URLs to absolute */
-						elm[attr] = elm[attr];
+						elm.getAttribute(attr).startsWith("#") || (elm[attr] = elm[attr]);
 					}
 				}
 				/* There is no easy way to get the textual representation of a DocumentType, so this is the best that I can do. */
