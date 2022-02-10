@@ -34,11 +34,14 @@ javascript: {
 		 * @param bName name of second global property to compare
 		 */
 		let propSorter = (aName, bName) => {
-			let a = window[aName];
-			let b = window[bName];
+			let a, b;
+			try {
+				let a = window[aName];
+				let b = window[bName];
+			} catch { return compare(aName, bName); }
 			let aFun = a instanceof Function;
 			if (aFun == (b instanceof Function)) {
-				return compare(a, b);
+				return compare(aName, bName);
 			} else {
 				return aFun ? +1 : -1;
 			}
@@ -54,7 +57,7 @@ javascript: {
 						enumerable: true
 					},
 					type: {
-						value: (prop === null ? "null" : prop === undefined ? "undefined" : Number.isNaN(prop) ? "undefined" : (typeof prop == "function" || prop instanceof Function) ? "function" : (typeof prop == "string" || prop instanceof String) ? "string" : (typeof prop == "number" || prop instanceof Number) ? "number" : (typeof prop == "bigint" || prop instanceof BigInt) ? "bigint" : (typeof prop == "boolean" || prop instanceof Boolean) ? "boolean" : (typeof prop == "symbol" || prop instanceof Symbol) ? "symbol" : (Object.getPrototypeOf(prop)[Symbol.toStringTag] || Object.getPrototypeOf(prop)?.constructor?.name)),
+						value: (prop === null ? "null" : prop === undefined ? "undefined" : Number.isNaN(prop) ? "undefined" : (typeof prop == "function" || prop instanceof Function) ? "function" : (typeof prop == "string" || prop instanceof String) ? "string" : (typeof prop == "number" || prop instanceof Number) ? "number" : (typeof prop == "bigint" || prop instanceof BigInt) ? "bigint" : (typeof prop == "boolean" || prop instanceof Boolean) ? "boolean" : (typeof prop == "symbol" || prop instanceof Symbol) ? "symbol" : (Object.getPrototypeOf(prop)?.[Symbol.toStringTag] || Object.getPrototypeOf(prop)?.constructor?.name)),
 						enumerable: true
 					},
 					value: {
