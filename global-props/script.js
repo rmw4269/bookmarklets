@@ -19,12 +19,27 @@ javascript: {
 		 * @param b second string to compare
 		 * @return negative number when <var>a</var> comes before <var>b</var>, positive number when <var>b</var> comes before <var>a</var>, and zero in all other cases
 		 */
-		let compare = globalThis.Intl?.Collator ? new Intl.Collator('en', {
-			usage: "sort",
-			sensitivity: "base",
-			numeric: true,
-			caseFirst: "upper"
-		}).compare : (a, b) => a.localeCompare(b);
+		let compare = globalThis.Intl?.Collator ? (() => {
+			let collator = new Intl.Collator('en', {
+				usage: "sort",
+				sensitivity: "base",
+				numeric: true,
+				caseFirst: "upper"
+			});
+			return (a, b) => collator.compare(a, b);
+		})() : (a, b) => {
+			if ([a, b].every(n => n.match(/[0-9\.]/))) {
+				[a, b] = [a, b].map(n => Number.parseFloat(n));
+				return a - b;
+			}
+		};
+
+		/**
+		 * This simply determines whether or not the given argument is a number (object or primitive).
+		 *
+		 * @param n value to consider
+		 */
+		let isNumber = n => (typeof n === "number") || (n instanceof Number) || (typeof n === "bigint") || (n instanceof BigInt);
 
 		/**
 		 * This is a property comparator. Properties are referenced indirectly by name, and they must be properites of <var>window</var>.
@@ -39,7 +54,9 @@ javascript: {
 				let a = window[aName];
 				let b = window[bName];
 			} catch { return compare(aName, bName); }
+			
 			let aFun = a instanceof Function;
+			
 			if (aFun == (b instanceof Function)) {
 				return compare(aName, bName);
 			} else {
